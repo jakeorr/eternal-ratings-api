@@ -1,6 +1,7 @@
 {
   "extends": ["airbnb", "prettier"],
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "react/prefer-stateless-function": "off"
   }
 }

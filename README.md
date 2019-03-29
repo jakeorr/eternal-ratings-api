@@ -1,1 +1,5 @@
-# eternal-deck-builder
+# eternal-ratings
+
+## install
+
+## how to use

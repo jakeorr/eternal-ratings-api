@@ -52,10 +52,10 @@ function getGroup(card) {
 
   const influences = influence.split('}{').map(el => el.replace(/[{}]/g, ''));
 
-  if (isFixing(card)) return 'fixing';
+  if (isFixing(card)) return 'Fixing and Power';
   if (isSingleInfluenceType(influences)) return influenceName[influences[0]];
 
-  return 'multi';
+  return 'Multifaction';
 }
 
 module.exports = { getGroup, isInfluenceStranger };

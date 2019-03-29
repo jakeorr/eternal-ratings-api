@@ -1,7 +1,11 @@
+const { createElement } = require('react');
+const blessed = require('blessed');
+const { render } = require('react-blessed');
 const { groupBy, range } = require('lodash');
 const { getCards } = require('./utils/draft_spreadsheet');
 const { rateCards } = require('./utils/card_ratings');
 const { getGroup } = require('./utils/card_groups');
+const App = require('./views/app.jsx').default;
 
 async function run() {
   try {
@@ -10,8 +14,6 @@ async function run() {
 
     const grouped = groupBy(rated, getGroup);
 
-    // console.log('grouped', grouped);
-
     const emptyCounts = range(5, -0.5, -0.5).reduce(
       (acc, rating) => ({
         ...acc,
@@ -19,26 +21,38 @@ async function run() {
       }),
       {}
     );
-    const groupCounts = Object.keys(grouped).reduce((acc, key) => {
-      const counts = grouped[key].reduce(
+    const groupsWithCounts = Object.keys(grouped).reduce((acc, key) => {
+      const groupCards = grouped[key];
+      const counts = groupCards.reduce(
         (inner, card) => ({
           ...inner,
           [card.rating]: inner[card.rating] + 1,
         }),
         emptyCounts
       );
-      return { ...acc, [key]: counts };
+      return { ...acc, [key]: { counts, cards: groupCards } };
     }, {});
 
-    console.log(groupCounts);
+    // console.log(groupsWithCounts);
 
     // TODO: count ratings
 
     // TODO: sort by cost
 
-    // TODO: pull out power cards
+    // Creating our screen
+    const screen = blessed.screen({
+      autoPadding: true,
+      smartCSR: true,
+      title: 'react-blessed hello world',
+    });
 
-    console.log('done');
+    // Adding a way to quit the program
+    screen.key(['escape', 'q', 'C-c'], () => process.exit(0));
+
+    // Rendering the React app using our screen
+    render(createElement(App, { groupsWithCounts }), screen);
+
+    // console.log('done');
   } catch (err) {
     console.error(err);
   }
