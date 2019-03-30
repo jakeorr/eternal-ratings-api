@@ -7,10 +7,10 @@ class Group extends Component {
     const { counts, cards } = this.props;
 
     return (
-      <element {...{ top: 0, left: 0, width: '100%', height: '100%' }}>
+      <box {...{ top: 0, left: 0, width: '100%', height: '100%' }}>
         <Summary {...{ counts }} />
         <CardList {...{ cards }} />
-      </element>
+      </box>
     );
   }
 }
