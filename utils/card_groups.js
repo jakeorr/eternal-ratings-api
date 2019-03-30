@@ -1,11 +1,4 @@
-const influenceName = {
-  F: 'Fire (red)',
-  T: 'Time (yellow)',
-  J: 'Justice (green)',
-  P: 'Primal (blue)',
-  S: 'Shadow (purple)',
-  '': 'Faction none',
-};
+const { group } = require('../config');
 
 function isSingleInfluenceType(influences) {
   const result = influences.reduce(
@@ -52,10 +45,10 @@ function getGroup(card) {
 
   const influences = influence.split('}{').map(el => el.replace(/[{}]/g, ''));
 
-  if (isFixing(card)) return 'Fixing and Power';
-  if (isSingleInfluenceType(influences)) return influenceName[influences[0]];
+  if (isFixing(card)) return group.FIXING;
+  if (isSingleInfluenceType(influences)) return influences[0];
 
-  return 'Multifaction';
+  return group.MULTI;
 }
 
 module.exports = { getGroup, isInfluenceStranger };

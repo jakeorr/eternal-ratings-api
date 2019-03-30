@@ -1,22 +1,34 @@
+import { map } from 'lodash';
 import React, { Component } from 'react';
+import { groupColor, groupName } from './../config';
+import Group from './group';
 
 class App extends Component {
   render() {
     const { groupsWithCounts } = this.props;
-    // TODO: testing
-    console.log('groups', Object.keys(groupsWithCounts));
-    return (
+    const groupCount = Object.keys(groupsWithCounts).length;
+    const widthPercent = 100 / groupCount;
+    let index = 0;
+
+    const groups = map(groupsWithCounts, ({ counts, cards }, key) => (
       <box
-        top="center"
-        left="center"
-        width="50%"
-        height="50%"
-        border={{ type: 'line' }}
-        style={{ border: { fg: 'blue' } }}
+        {...{
+          key,
+          label: groupName[key],
+          // eslint-disable-next-line no-plusplus
+          left: `${widthPercent * index++}%`,
+          top: '0%',
+          width: `${widthPercent.toFixed(1)}%`,
+          height: '100%',
+          border: { type: 'line' },
+          style: { border: { fg: groupColor[key] } },
+        }}
       >
-        Hello world
+        <Group {...{ counts, cards }} />
       </box>
-    );
+    ));
+
+    return <element>{groups}</element>;
   }
 }
 
