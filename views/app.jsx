@@ -1,6 +1,17 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { influenceGroups as influenceGroupNames } from '../config';
 import Group from './group';
+
+const propTypes = {
+  groups: PropTypes.shape({
+    name: PropTypes.string,
+    counts: PropTypes.objectOf(PropTypes.number),
+    cards: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+};
+
+const defaultProps = {};
 
 class App extends Component {
   render() {
@@ -21,7 +32,6 @@ class App extends Component {
           <Group
             {...{
               key: name,
-              // eslint-disable-next-line no-plusplus
               left: `${widthPercent * index}%`,
               top: '0%',
               width: `${widthPercent.toFixed(2)}%`,
@@ -36,7 +46,6 @@ class App extends Component {
           <Group
             {...{
               key: name,
-              // eslint-disable-next-line no-plusplus
               left: `${widthPercent * (index + influenceGroups.length)}%`,
               top: '0%',
               width: `${widthPercent.toFixed(1)}%`,
@@ -51,5 +60,8 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = propTypes;
+App.defaultProps = defaultProps;
 
 export default App;

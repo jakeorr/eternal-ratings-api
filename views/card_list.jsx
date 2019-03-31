@@ -1,9 +1,54 @@
 import { reverse, sortBy } from 'lodash';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { cardsPerPage } from '../config';
+import Pagination from './pagination';
+
+const propTypes = {
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  cards: PropTypes.arrayOf(PropTypes.object),
+  color: PropTypes.string,
+};
+
+const defaultProps = {
+  height: '100%',
+  top: 0,
+  cards: [],
+  color: null,
+};
 
 class CardList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { page: 1 };
+
+    this.onPreviousClick = this.onPreviousClick.bind(this);
+    this.onNextClick = this.onNextClick.bind(this);
+  }
+
+  onPreviousClick() {
+    const {
+      state: { page },
+    } = this;
+    this.setState({ page: page - 1 });
+  }
+
+  onNextClick() {
+    const {
+      state: { page },
+    } = this;
+    this.setState({ page: page + 1 });
+  }
+
   render() {
-    const { height, top, cards, color } = this.props;
+    const {
+      onNextClick,
+      onPreviousClick,
+      props: { height, top, cards, color },
+      state: { page },
+    } = this;
 
     /*
     { setNumber: 3,
@@ -24,7 +69,14 @@ class CardList extends Component {
       rating: '0.5' }
     */
 
-    const content = reverse(sortBy(cards, 'rating')).reduce(
+    const start = cardsPerPage * (page - 1);
+    const end = cardsPerPage * page;
+    const sortedCards = reverse(sortBy(cards, 'rating'));
+    const pageCards = sortedCards.slice(start, end);
+
+    const shouldPaginate = cards.length !== pageCards.length;
+
+    const content = pageCards.reduce(
       (acc, { count, name, rating }) =>
         `${acc}${count} ${name} {${color}-fg}${rating.toFixed(
           1
@@ -34,8 +86,6 @@ class CardList extends Component {
 
     // TODO: influence types (cost + gain)
     // maybe "*" gain
-
-    // TODO: add pagination
 
     return (
       <box
@@ -49,9 +99,24 @@ class CardList extends Component {
           border: { type: 'line' },
           style: { border: { fg: color } },
         }}
-      />
+      >
+        {shouldPaginate && (
+          <Pagination
+            {...{
+              offset: page - 1,
+              limit: cardsPerPage,
+              count: cards.length,
+              onNextClick,
+              onPreviousClick,
+            }}
+          />
+        )}
+      </box>
     );
   }
 }
+
+CardList.propTypes = propTypes;
+CardList.defaultProps = defaultProps;
 
 export default CardList;

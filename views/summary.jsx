@@ -1,4 +1,21 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+
+const propTypes = {
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  color: PropTypes.string,
+  label: PropTypes.string,
+  counts: PropTypes.objectOf(PropTypes.number),
+};
+
+const defaultProps = {
+  height: '100%',
+  top: 0,
+  color: null,
+  label: '',
+  counts: {},
+};
 
 class Summary extends Component {
   render() {
@@ -30,5 +47,8 @@ class Summary extends Component {
     );
   }
 }
+
+Summary.propTypes = propTypes;
+Summary.defaultProps = defaultProps;
 
 export default Summary;
