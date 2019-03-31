@@ -88,5 +88,9 @@ async function run() {
 }
 
 run();
+
+// use this to build a sample file of groups
 // writeSampleFile();
+
+// use this to render with sample file
 // renderToConsole(sample);
