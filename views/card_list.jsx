@@ -1,9 +1,9 @@
-import { sortBy } from 'lodash';
+import { reverse, sortBy } from 'lodash';
 import React, { Component } from 'react';
 
 class CardList extends Component {
   render() {
-    const { cards } = this.props;
+    const { height, top, cards, color } = this.props;
 
     /*
     { setNumber: 3,
@@ -24,21 +24,30 @@ class CardList extends Component {
       rating: '0.5' }
     */
 
-    const headerRow = ['Name', 'Rating'];
+    const content = reverse(sortBy(cards, 'rating')).reduce(
+      (acc, { count, name, rating }) =>
+        `${acc}${count} ${name} {${color}-fg}${rating.toFixed(
+          1
+        )}{/${color}-fg}\n`,
+      ''
+    );
 
-    const rows = sortBy(cards, 'score').map(({ name, rating }) => [
-      name,
-      rating,
-    ]);
+    // TODO: influence types (cost + gain)
+    // maybe "*" gain
+
+    // TODO: add pagination
 
     return (
-      <table
+      <box
         {...{
-          top: '40%',
+          top,
           left: 0,
           width: '100%',
-          height: '60%',
-          data: [headerRow, ...rows],
+          height,
+          tags: true,
+          content,
+          border: { type: 'line' },
+          style: { border: { fg: color } },
         }}
       />
     );

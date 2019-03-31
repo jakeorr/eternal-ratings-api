@@ -1,25 +1,30 @@
-import { map } from 'lodash';
 import React, { Component } from 'react';
 
 class Summary extends Component {
   render() {
-    const { counts } = this.props;
+    const { height, label, top, counts, color } = this.props;
 
-    const headerRow = ['Rating', '#'];
-
-    const rows = map(counts, (count, rating) => [
-      rating,
-      count.toFixed(0),
-    ]).filter(el => el[1] !== '0');
+    const content = Object.keys(counts).reduce((acc, rating) => {
+      const count = counts[rating];
+      if (!count) return acc;
+      const isGood = parseFloat(rating) >= 3;
+      return `${acc}${
+        isGood ? '{bold}' : '{grey-fg}'
+      }${rating}:\t${count}{/}\n`;
+    }, '');
 
     return (
-      <table
+      <box
         {...{
-          top: 0,
+          label,
+          top,
           left: 0,
           width: '100%',
-          height: '40%',
-          data: [headerRow, ...rows],
+          height,
+          tags: true,
+          content,
+          border: { type: 'line' },
+          style: { border: { fg: color } },
         }}
       />
     );

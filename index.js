@@ -1,13 +1,13 @@
+const path = require('path');
+const fs = require('fs');
 const Promise = require('bluebird');
-const { createElement } = require('react');
-const blessed = require('blessed');
-const { render } = require('react-blessed');
 const { groupBy, range } = require('lodash');
 const ora = require('ora');
-const { getCards } = require('./utils/draft_spreadsheet');
 const { rateCards } = require('./utils/card_ratings');
 const { getGroup } = require('./utils/card_groups');
-const App = require('./views/app.jsx').default;
+const { getCards } = require('./lib/cards_file');
+const { renderToConsole } = require('./lib/terminal');
+const sample = require('./sample.json');
 
 async function run() {
   try {
@@ -46,41 +46,30 @@ async function run() {
       }),
       {}
     );
-    const groupsWithCounts = Object.keys(grouped).reduce((acc, key) => {
-      const groupCards = grouped[key];
+    const groups = Object.keys(grouped).map(name => {
+      const groupCards = grouped[name];
       const counts = groupCards.reduce(
         (inner, card) => ({
           ...inner,
-          [card.rating]: inner[card.rating] + 1,
+          [card.rating.toFixed(1)]: inner[card.rating.toFixed(1)] + 1,
         }),
         emptyCounts
       );
-      return { ...acc, [key]: { counts, cards: groupCards } };
+      return { name, counts, cards: groupCards };
     }, {});
 
-    // console.log(groupsWithCounts);
+    // TODO: temp
+    // return fs.writeFile(
+    //   path.join(__dirname, 'sample.json'),
+    //   JSON.stringify(groups, null, 2),
+    //   err => console.log('done', err)
+    // );
 
-    // TODO: count ratings
-
-    // TODO: sort by cost
-
-    // Creating our screen
-    const screen = blessed.screen({
-      autoPadding: true,
-      smartCSR: true,
-      title: 'eternal-ratings',
-    });
-
-    // Adding a way to quit the program
-    screen.key(['escape', 'q', 'C-c'], () => process.exit(0));
-
-    // Rendering the React app using our screen
-    render(createElement(App, { groupsWithCounts }), screen);
-
-    // console.log('done');
+    renderToConsole(groups);
   } catch (err) {
     console.error(err);
   }
 }
 
 run();
+// renderToConsole(sample);

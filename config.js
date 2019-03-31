@@ -30,10 +30,10 @@ module.exports = {
     [group.TIME]: 'yellow',
     [group.JUSTICE]: 'green',
     [group.PRIMAL]: 'blue',
-    [group.SHADOW]: 'purple',
+    [group.SHADOW]: 'magenta',
     [group.NONE]: 'grey',
-    [group.MULTI]: 'black',
-    [group.FIXING]: 'white',
+    [group.MULTI]: 'white',
+    [group.FIXING]: 'cyan',
   },
 
   influenceGroups: [
@@ -42,5 +42,7 @@ module.exports = {
     group.JUSTICE,
     group.PRIMAL,
     group.SHADOW,
+    group.NONE,
+    group.MULTI,
   ],
 };
