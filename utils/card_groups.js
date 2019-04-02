@@ -65,10 +65,10 @@ function groupCards(ratedCards) {
 
   return Object.keys(grouped).map(name => {
     const cards = grouped[name];
-    const counts = cards.reduce((inner, { rating }) => {
+    const counts = cards.reduce((inner, { rating, count }) => {
       return {
         ...inner,
-        [rating.toFixed(1)]: inner[rating.toFixed(1)] + 1,
+        [rating.toFixed(1)]: inner[rating.toFixed(1)] + count,
         [FOUR_PLUS_GROUP]:
           rating >= 4 ? inner[FOUR_PLUS_GROUP] + 1 : inner[FOUR_PLUS_GROUP],
       };
