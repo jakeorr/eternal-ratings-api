@@ -1,5 +1,6 @@
 const { getCells } = require('../lib/google_docs');
 const { isInfluenceStranger } = require('./card_groups');
+const { sanitizeName } = require('./strings');
 const { ratingsSpreadsheetId } = require('../config');
 
 const headerRow = 2;
@@ -28,7 +29,7 @@ async function getRatings() {
     if (row <= headerRow) return acc;
     if (!rating && rating !== 0) return acc;
 
-    return { ...acc, [value.trim()]: rating };
+    return { ...acc, [sanitizeName(value)]: rating };
   }, {});
 }
 
@@ -36,15 +37,21 @@ async function rateCards(cards) {
   const ratings = await getRatings();
   return cards.map(card => {
     let { name } = card;
+    const { setNumber } = card;
 
     if (isInfluenceStranger(card)) name = INFLUENCE_STRANGER_NAME;
     if (name.endsWith('Banner')) name = ALL_BANNER_NAME;
 
     const rating = ratings[name];
+    const foundRating = !!rating || rating === 0;
+    const isCampaignSet = setNumber > 1000;
 
-    if (!rating) console.error('Could not rate card!', card);
+    if (isCampaignSet) console.error('No ratings for campaign sets');
+    if (!foundRating && !isCampaignSet) {
+      console.error('Could not rate card!', card);
+    }
 
-    return { ...card, rating };
+    return { ...card, rating: foundRating ? rating : -1 };
   });
 }
 

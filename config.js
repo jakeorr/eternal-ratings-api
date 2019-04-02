@@ -46,4 +46,7 @@ module.exports = {
     group.NONE,
     group.MULTI,
   ],
+
+  NO_RATING_GROUP: '-1.0',
+  FOUR_PLUS_GROUP: '4+',
 };

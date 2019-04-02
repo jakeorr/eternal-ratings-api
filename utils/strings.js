@@ -6,6 +6,10 @@ function keysToCamel(obj) {
   }, {});
 }
 
+function sanitizeName(name) {
+  return name.replace('’', "'").trim();
+}
+
 /**
  * Parses strings from a card export.
  *
@@ -17,7 +21,7 @@ function parseCardName(str) {
   const re = /(\d\d*)\s(.+)\(Set.+\)/i;
   // eslint-disable-next-line no-unused-vars
   const [line, count, name] = re.exec(str);
-  return { name: name.trim(), count };
+  return { name: sanitizeName(name), count };
 }
 
-module.exports = { keysToCamel, parseCardName };
+module.exports = { keysToCamel, parseCardName, sanitizeName };

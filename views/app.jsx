@@ -4,11 +4,13 @@ import { influenceGroups as influenceGroupNames } from '../config';
 import Group from './group';
 
 const propTypes = {
-  groups: PropTypes.shape({
-    name: PropTypes.string,
-    counts: PropTypes.objectOf(PropTypes.number),
-    cards: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      counts: PropTypes.objectOf(PropTypes.number),
+      cards: PropTypes.arrayOf(PropTypes.object),
+    })
+  ).isRequired,
 };
 
 const defaultProps = {};

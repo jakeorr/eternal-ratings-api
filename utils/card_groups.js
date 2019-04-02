@@ -1,4 +1,5 @@
-const { group } = require('../config');
+const { groupBy, range } = require('lodash');
+const { group, NO_RATING_GROUP, FOUR_PLUS_GROUP } = require('../config');
 
 function isSingleInfluenceType(influences) {
   const result = influences.reduce(
@@ -12,8 +13,8 @@ function isSingleInfluenceType(influences) {
   return result.isSingle;
 }
 
-function isInfluenceStranger({ unitType = [], cardText }) {
-  return unitType.includes('Stranger') && /gain {.}/.test(cardText);
+function isInfluenceStranger({ unitType = [], cardText, name }) {
+  return unitType.includes('Stranger') && /gain {.}/i.test(cardText);
 }
 
 function isFixing(card) {
@@ -51,4 +52,29 @@ function getGroup(card) {
   return group.MULTI;
 }
 
-module.exports = { getGroup, isInfluenceStranger };
+function groupCards(ratedCards) {
+  const grouped = groupBy(ratedCards, getGroup);
+
+  const emptyCounts = range(5, -0.5, -0.5).reduce(
+    (acc, rating) => ({
+      ...acc,
+      [rating.toFixed(1)]: 0,
+    }),
+    { NO_RATING_GROUP: 0, FOUR_PLUS_GROUP: 0 }
+  );
+
+  return Object.keys(grouped).map(name => {
+    const cards = grouped[name];
+    const counts = cards.reduce((inner, { rating }) => {
+      return {
+        ...inner,
+        [rating.toFixed(1)]: inner[rating.toFixed(1)] + 1,
+        [FOUR_PLUS_GROUP]:
+          rating >= 4 ? inner[FOUR_PLUS_GROUP] + 1 : inner[FOUR_PLUS_GROUP],
+      };
+    }, emptyCounts);
+    return { name, counts, cards };
+  }, {});
+}
+
+module.exports = { groupCards, getGroup, isInfluenceStranger };

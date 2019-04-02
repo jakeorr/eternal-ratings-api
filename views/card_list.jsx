@@ -66,7 +66,7 @@ class CardList extends Component {
       detailsUrl: 'https://eternalwarcry.com/cards/details/3-2/helpful-doorbot',
       deckBuildable: true,
       count: 1,
-      rating: '0.5' }
+      rating: 0.5 }
     */
 
     const start = cardsPerPage * (page - 1);
