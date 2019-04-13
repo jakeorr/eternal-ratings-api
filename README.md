@@ -15,6 +15,10 @@ This is an initial attempt to get something working that I can use. It's mainly 
 
 ## API
 
+```js
+const eternalRatings = require('eternal-ratings-api');
+```
+
 See [render.js](render.js) for an example.
 
 `rateCards` will return rated cards including details from the Eternal Warcry API.
