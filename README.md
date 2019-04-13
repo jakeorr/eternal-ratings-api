@@ -4,7 +4,7 @@ A node.js app to rate Eternal cards. Built to be used as an api for other projec
 
 This is an initial attempt to get something working that I can use. It's mainly aimed at sorting and rating sealed/draft card lists. It uses ratings spreadsheets I've found online, and the excellent resources from [Eternal Warcry](https://eternalwarcry.com/cards/download).
 
-![example](https://raw.githubusercontent.com/jakeorr/eternal-ratings/master/img/example.png)
+![example](https://raw.githubusercontent.com/jakeorr/eternal-ratings-api/master/img/example.png)
 
 ## Installation
 
