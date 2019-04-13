@@ -3,6 +3,7 @@
   "description": "A tool for the Eternal card game that pulls together card details and ratings.",
   "version": "1.0.0",
   "main": "index.js",
+  "homepage": "https://github.com/jakeorr/eternal-ratings-api",
   "author": "jakeorr <jake.a.orr@gmail.com>",
   "license": "MIT",
   "scripts": {
