@@ -1,11 +1,13 @@
 {
-  "name": "eternal-ratings",
+  "name": "eternal-ratings-api",
+  "description": "A tool for the Eternal card game that pulls together card details and ratings.",
   "version": "1.0.0",
   "main": "index.js",
   "author": "jakeorr <jake.a.orr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node index.js"
+    "start": "babel-node render.js",
+    "fetch": "node fetch.js"
   },
   "dependencies": {
     "blessed": "^0.1.81",

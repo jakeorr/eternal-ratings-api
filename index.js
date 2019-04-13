@@ -1,75 +1,30 @@
-const path = require('path');
-const fs = require('fs');
-const Promise = require('bluebird');
-const ora = require('ora');
-const { rateCards } = require('./utils/card_ratings');
+/**
+ * eternal-ratings-api
+ */
+// run `yarn fetch` to rebuild rated_cards.json
+const ratedCards = require('./rated_cards.json');
 const { groupCards } = require('./utils/card_groups');
-const { getCards } = require('./lib/cards_file');
-const { renderToConsole } = require('./lib/terminal');
-const sample = require('./sample.json');
+const { parseCardExport } = require('./utils/strings');
 
-async function getGroupedCards() {
-  let cards;
-  let rated;
-  const cardsSpinner = ora('Fetching cards');
-  const ratingSpinner = ora('Rating cards');
-
-  try {
-    cardsSpinner.start();
-    cards = await getCards();
-    cardsSpinner.succeed();
-  } catch (err) {
-    cardsSpinner.fail();
-    throw err;
-  }
-
-  try {
-    ratingSpinner.start();
-    rated = await rateCards(cards);
-    ratingSpinner.succeed();
-  } catch (err) {
-    ratingSpinner.fail();
-    throw err;
-  }
-
-  return groupCards(rated);
+function rateCard(card) {
+  const cardWithRating = ratedCards.find(({ name }) => name === card.name);
+  return { ...cardWithRating, ...card };
 }
 
 /**
- * For dev purposes. Rates+groups cards and writes to sample.json.
- * Makes working on the terminal UI quicker.
+ * Accepts an array of cards with `name` and optionally `count`.
+ *
+ * You can get cards in this format using `parseCardExport` to process
+ * lines from an eternal export.
  */
-async function writeSampleFile() {
-  try {
-    const groups = await getGroupedCards();
-
-    fs.writeFile(
-      path.join(__dirname, 'sample.json'),
-      JSON.stringify(groups, null, 2),
-      err => console.log('done', err)
-    );
-  } catch (err) {
-    console.error(err);
-  }
+function rateCards(cards) {
+  return cards.map(rateCard);
 }
 
-async function run() {
-  try {
-    const groups = await getGroupedCards();
-
-    // delay so spinner success has a chance to render
-    await Promise.delay(500);
-
-    renderToConsole(groups);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-run();
-
-// use this to build a sample file of groups
-// writeSampleFile();
-
-// use this to render with sample file
-// renderToConsole(sample);
+module.exports = {
+  rateCards,
+  rateCard,
+  ratedCards,
+  groupCards,
+  parseCardExport,
+};

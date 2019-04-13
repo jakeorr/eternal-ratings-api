@@ -19,6 +19,7 @@ const ratingsByColumn = {
 };
 const INFLUENCE_STRANGER_NAME = 'All Influence Strangers';
 const ALL_BANNER_NAME = 'All Banners';
+const ALL_CRESTS_NAME = 'Crests';
 
 async function getRatings() {
   const cells = await getCells(ratingsSpreadsheetId);
@@ -29,7 +30,7 @@ async function getRatings() {
     if (row <= headerRow) return acc;
     if (!rating && rating !== 0) return acc;
 
-    return { ...acc, [sanitizeName(value)]: rating };
+    return { ...acc, [sanitizeName(value).toLowerCase()]: rating };
   }, {});
 }
 
@@ -37,17 +38,28 @@ async function rateCards(cards) {
   const ratings = await getRatings();
   return cards.map(card => {
     let { name } = card;
-    const { setNumber } = card;
+    const { setNumber, rarity, deckBuildable, type } = card;
 
     if (isInfluenceStranger(card)) name = INFLUENCE_STRANGER_NAME;
     if (name.endsWith('Banner')) name = ALL_BANNER_NAME;
+    if (name.startsWith('Crest')) name = ALL_CRESTS_NAME;
 
-    const rating = ratings[name];
+    const rating = ratings[name.toLowerCase()];
     const foundRating = !!rating || rating === 0;
-    const isCampaignSet = setNumber > 1000;
+    const isSigil = name.endsWith('Sigil') && type === 'Power';
 
-    if (isCampaignSet) console.error('No ratings for campaign sets');
-    if (!foundRating && !isCampaignSet) {
+    const shouldSkip =
+      // No ratings for campaign sets
+      setNumber > 1000 ||
+      // No ratings for promo cards
+      rarity === 'Promo' ||
+      // Non-deckBuildable includes cards that are created by other cards, possible other things...
+      !deckBuildable ||
+      isSigil ||
+      // No ratings for set 0
+      setNumber === 0;
+
+    if (!foundRating && !shouldSkip) {
       console.error('Could not rate card!', card);
     }
 

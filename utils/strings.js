@@ -11,17 +11,17 @@ function sanitizeName(name) {
 }
 
 /**
- * Parses strings from a card export.
+ * Parses a line from a card export.
  *
  * "1 Helpful Doorbot (Set3 #2)"
  * becomes
  * { name: "Helpful Doorbot", count: 1 }
  */
-function parseCardName(str) {
+function parseCardExport(str) {
   const re = /(\d\d*)\s(.+)\(Set.+\)/i;
   // eslint-disable-next-line no-unused-vars
   const [line, count, name] = re.exec(str);
   return { name: sanitizeName(name), count };
 }
 
-module.exports = { keysToCamel, parseCardName, sanitizeName };
+module.exports = { keysToCamel, parseCardExport, sanitizeName };

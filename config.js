@@ -48,5 +48,5 @@ module.exports = {
   ],
 
   NO_RATING_GROUP: '-1.0',
-  FOUR_PLUS_GROUP: '4+',
+  THREE_PLUS_GROUP: '3+',
 };

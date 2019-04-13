@@ -1,8 +1,8 @@
-# eternal-ratings
+# eternal-ratings-api
 
-A node.js app to rate a set of Eternal cards, and render grouped output to the terminal.
+A node.js app to rate Eternal cards. Built to be used as an api for other projects. Provides terminal rendering
 
-This is an initial attempt to get something working that I can use. It's mainly aimed at sorting and rating sealed/draft card lists. It uses ratings spreadsheets I've found online, and the excellent resources from [Eternal Warcry](https://eternalwarcry.com/cards/download). More features and support to come!
+This is an initial attempt to get something working that I can use. It's mainly aimed at sorting and rating sealed/draft card lists. It uses ratings spreadsheets I've found online, and the excellent resources from [Eternal Warcry](https://eternalwarcry.com/cards/download).
 
 ![example](https://raw.githubusercontent.com/jakeorr/eternal-ratings/master/img/example.png)
 
@@ -13,10 +13,32 @@ This is an initial attempt to get something working that I can use. It's mainly 
 - Clone or download this repository
 - `cd eternal-ratings && yarn`
 
-## Usage
+## API
+
+See [render.js](render.js) for an example.
+
+`rateCards` will return rated cards including details from the Eternal Warcry API.
+
+`ratedCards` returns all cards with ratings.
+
+`groupCards` returns a grouped set of rated cards. Used as prep for rendering by the terminal renderer.
+
+`parseCardExport` parses name and count from a line of Eternal export.
+
+"1 Helpful Doorbot (Set3 #2)" becomes
+
+```json
+{ "name": "Helpful Doorbot", "count": 1 }
+```
+
+## Terminal Usage
 
 - Paste an exported Eternal card list into the file with the really obvious name (`PASTE_CARDS_HERE.txt`).
-- `yarn start`
+- `yarn start` to render grouped output to terminal.
+
+## Data Fetch
+
+This project stores a list of all cards with ratings (where available) in rated_cards.json. The file can be updated (for new cards/ratings) with `yarn fetch`.
 
 ## :sparkles: Future Improvements :sparkles:
 
