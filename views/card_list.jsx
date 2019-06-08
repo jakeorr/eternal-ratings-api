@@ -84,17 +84,6 @@ class CardList extends Component {
       ''
     );
 
-    // TODO: testing
-    if (color === 'red') {
-      console.log('page', page);
-      console.log('shouldPaginate', shouldPaginate);
-      console.log('sortedCards.length', sortedCards.length);
-      console.log('pageCards.length', pageCards.length);
-    }
-
-    // TODO: influence types (cost + gain)
-    // maybe "*" gain
-
     return (
       <box
         {...{
