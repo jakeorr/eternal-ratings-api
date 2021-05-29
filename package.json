@@ -24,7 +24,7 @@
     "react-blessed": "^0.5.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "ws": "^6.2.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
